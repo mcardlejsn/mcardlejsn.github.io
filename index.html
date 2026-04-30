@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DSP Buddy — The Tool DSPs Actually Need On Shift</title>
+  <meta name="description" content="DSP Buddy gives Direct Support Professionals instant guidance and incident logging during the moments that matter most. No internet needed to use the app. HIPAA safe." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:wght@700;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #080808;
+      --surface: #111111;
+      --surface2: #1a1a1a;
+      --border: #2a2a2a;
+      --text: #f0f0f0;
+      --muted: #888888;
+      --red: #e05252;
+      --orange: #e07832;
+      --purple: #8b5cf6;
+      --teal: #2dd4bf;
+      --blue: #3b82f6;
+      --amber: #f59e0b;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(8,8,8,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Fraunces', serif;
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-logo span { color: var(--red); }
+
+    .nav-cta {
+      background: var(--red);
+      color: white;
+      padding: 10px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: opacity 0.2s;
+    }
+
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 120px 40px 80px;
+      max-width: 1200px;
+      margin: 0 auto;
+      gap: 60px;
+    }
+
+    .hero-content { flex: 1; }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(224,82,82,0.15);
+      border: 1px solid rgba(224,82,82,0.3);
+      color: var(--red);
+      padding: 6px 16px;
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -2px;
+      margin-bottom: 24px;
+      color: var(--text);
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--red);
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 480px;
+      margin-bottom: 40px;
+      line-height: 1.7;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--red);
+      color: white;
+      padding: 16px 32px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: opacity 0.2s, transform 0.2s;
+      display: inline-block;
+    }
+
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    .btn-secondary {
+      background: var(--surface2);
+      color: var(--text);
+      padding: 16px 32px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      border: 1px solid var(--border);
+      transition: background 0.2s, transform 0.2s;
+      display: inline-block;
+    }
+
+    .btn-secondary:hover { background: #222; transform: translateY(-1px); }
+
+    .hero-image {
+      flex: 0 0 280px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .phone-mockup {
+      width: 260px;
+      border-radius: 36px;
+      overflow: hidden;
+      border: 2px solid var(--border);
+      box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+    }
+
+    .phone-mockup img {
+      width: 100%;
+      display: block;
+    }
+
+    /* SECTIONS */
+    section {
+      padding: 100px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--red);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      color: var(--text);
+    }
+
+    .section-subtitle {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 600px;
+      line-height: 1.7;
+      margin-bottom: 60px;
+    }
+
+    /* DIVIDER */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* PROBLEM */
+    .problem-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .problem-text p {
+      font-size: 1.1rem;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .problem-text p strong {
+      color: var(--text);
+    }
+
+    .problem-quote {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--red);
+      border-radius: 12px;
+      padding: 32px;
+      font-size: 1.2rem;
+      font-style: italic;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .problem-quote cite {
+      display: block;
+      margin-top: 16px;
+      font-size: 0.85rem;
+      font-style: normal;
+      color: var(--muted);
+    }
+
+    /* SCREENSHOTS */
+    .screenshots-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 20px;
+    }
+
+    .screenshot-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .screenshot-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    .screenshot-card img {
+      width: 100%;
+      display: block;
+    }
+
+    .screenshot-label {
+      padding: 16px 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+
+    /* FEATURES */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .feature-card:hover {
+      border-color: #444;
+      transform: translateY(-2px);
+    }
+
+    .feature-icon {
+      font-size: 1.8rem;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .feature-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .feature-card p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* CATEGORIES */
+    .categories-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .category-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: white;
+    }
+
+    /* PRIVACY */
+    .privacy-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 60px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .privacy-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .privacy-stat {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .privacy-stat .number {
+      font-family: 'Fraunces', serif;
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--teal);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .privacy-stat .label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    /* PRICING */
+    .pricing-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 48px;
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .pricing-card h3 {
+      font-family: 'Fraunces', serif;
+      font-size: 1.8rem;
+      font-weight: 900;
+      margin-bottom: 16px;
+    }
+
+    .pricing-card p {
+      color: var(--muted);
+      margin-bottom: 32px;
+      line-height: 1.7;
+    }
+
+    .pricing-features {
+      list-style: none;
+      text-align: left;
+      margin-bottom: 40px;
+    }
+
+    .pricing-features li {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .pricing-features li:last-child { border-bottom: none; }
+
+    .check { color: var(--teal); font-size: 1.1rem; }
+
+    /* ABOUT */
+    .about-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .about-text p {
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 20px;
+      font-size: 1.05rem;
+    }
+
+    .about-text p strong { color: var(--text); }
+
+    .about-highlight {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+    }
+
+    .about-highlight h3 {
+      font-family: 'Fraunces', serif;
+      font-size: 1.4rem;
+      margin-bottom: 16px;
+    }
+
+    .about-highlight p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    /* CTA SECTION */
+    .cta-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 80px 60px;
+      text-align: center;
+      margin: 0 40px 100px;
+      max-width: 1120px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-section h2 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 900;
+      letter-spacing: -1px;
+      margin-bottom: 20px;
+    }
+
+    .cta-section p {
+      color: var(--muted);
+      font-size: 1.1rem;
+      margin-bottom: 40px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    footer p {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    footer a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+
+    footer a:hover { color: var(--text); }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav { padding: 16px 20px; }
+      .hero { flex-direction: column; padding: 100px 20px 60px; gap: 40px; }
+      .hero-image { flex: none; }
+      section { padding: 60px 20px; }
+      .problem-grid { grid-template-columns: 1fr; }
+      .screenshots-grid { grid-template-columns: 1fr 1fr; }
+      .privacy-section { grid-template-columns: 1fr; padding: 40px; gap: 40px; }
+      .about-section { grid-template-columns: 1fr; gap: 40px; }
+      .cta-section { padding: 48px 32px; margin: 0 20px 60px; }
+      footer { flex-direction: column; text-align: center; }
+    }
+
+    @media (max-width: 480px) {
+      .screenshots-grid { grid-template-columns: 1fr; }
+      .privacy-stats { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-content > * {
+      animation: fadeUp 0.6s ease forwards;
+      opacity: 0;
+    }
+
+    .hero-badge { animation-delay: 0.1s; }
+    .hero h1 { animation-delay: 0.2s; }
+    .hero p { animation-delay: 0.3s; }
+    .hero-buttons { animation-delay: 0.4s; }
+    .hero-image { animation: fadeUp 0.8s ease 0.3s forwards; opacity: 0; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">DSP<span>Buddy</span></a>
+    <a href="#demo" class="nav-cta">▶ Watch Demo</a>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-content">
+      <span class="hero-badge">Built by a DSP, for DSPs</span>
+      <h1>The Tool DSPs Actually Need <em>On Shift</em></h1>
+      <p>Instant guidance and incident logging for Direct Support Professionals — no internet needed, HIPAA safe, and built by someone who does the job.</p>
+      <div class="hero-buttons">
+        <a href="#demo" class="btn-primary">▶ Watch Demo</a>
+        <a href="#contact" class="btn-secondary">Get Started →</a>
+      </div>
+    </div>
+    <div class="hero-image">
+      <div class="phone-mockup">
+        <img src="onboarding.png" alt="DSP Buddy Welcome Screen" />
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- VIDEO DEMO -->
+  <section id="demo">
+    <p class="section-label">See It In Action</p>
+    <h2 class="section-title">Watch the Demo</h2>
+    <p class="section-subtitle">See how DSP Buddy works in a real shift scenario.</p>
+    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 16px; border: 1px solid var(--border); max-width: 800px; margin: 0 auto;">
+      <iframe
+        src="https://www.youtube.com/embed/fiRGpSMSb34"
+        title="DSP Buddy Demo"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+      </iframe>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- PROBLEM -->
+  <section>
+    <p class="section-label">The Problem</p>
+    <h2 class="section-title">The Gap No One Talks About</h2>
+    <div class="problem-grid">
+      <div class="problem-text">
+        <p>Most organizations have software for <strong>documentation, medication management, and HR</strong>. But when a resident is in crisis at 2am, your DSPs are on their own.</p>
+        <p>No in-the-moment guidance. No quick way to capture what happened. Just experience, instinct, and hope that the details get remembered correctly hours later when shift notes are finally written.</p>
+        <p><strong>DSP Buddy was built to fill that gap</strong> — by a Direct Support Professional who lived it every shift.</p>
+      </div>
+      <blockquote class="problem-quote">
+        "I built the tool I wished I had during every difficult shift. Fast, private, and designed for the real demands of the job."
+        <cite>— A Direct Support Professional &amp; Creator of DSP Buddy</cite>
+      </blockquote>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SCREENSHOTS -->
+  <section>
+    <p class="section-label">The App</p>
+    <h2 class="section-title">See It In Action</h2>
+    <p class="section-subtitle">Designed for speed and clarity during the moments that matter most.</p>
+    <div class="screenshots-grid">
+      <div class="screenshot-card">
+        <!-- SCREENSHOT 2: Replace src with your home screen screenshot filename -->
+        <img src="home.png" alt="DSP Buddy Home Screen" />
+        <div class="screenshot-label">7 Color-Coded Situation Cards</div>
+      </div>
+      <div class="screenshot-card">
+        <!-- SCREENSHOT 3: Replace src with your detail screen (action steps) screenshot filename -->
+        <img src="detail-top.png" alt="Immediate Action Steps" />
+        <div class="screenshot-label">Immediate Action Steps</div>
+      </div>
+      <div class="screenshot-card">
+        <!-- SCREENSHOT 4: Replace src with your detail screen (log details) screenshot filename -->
+        <img src="detail-bottom.png" alt="Incident Logging" />
+        <div class="screenshot-label">Fast Incident Logging</div>
+      </div>
+      <div class="screenshot-card">
+        <!-- SCREENSHOT 5: Replace src with your history screen screenshot filename -->
+        <img src="history.png" alt="Incident History" />
+        <div class="screenshot-label">Filterable Incident History</div>
+      </div>
+      <div class="screenshot-card">
+        <img src="shiftlog.png" alt="Shift Log" />
+        <div class="screenshot-label">Shift Log with Voice Notes</div>
+      </div>
+      <div class="screenshot-card">
+        <img src="incident-details.png" alt="Incident Details" />
+        <div class="screenshot-label">Full Incident Details View</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <p class="section-label">Features</p>
+    <h2 class="section-title">Built for the Realities of the Job</h2>
+    <p class="section-subtitle">Every feature designed around how DSP work actually happens — not how someone imagined it would.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <span class="feature-icon">🎨</span>
+        <h3>7 Color-Coded Situation Cards</h3>
+        <p>Aggressive behavior, meltdowns, medication refusal and more. Find what you need in seconds — no searching, no reading.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">✅</span>
+        <h3>Immediate Action Steps</h3>
+        <p>Clear, checkable guidance for every situation. Exactly what staff need during the moment — not after.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">📋</span>
+        <h3>Fast Incident Logging</h3>
+        <p>Severity ratings, quick tags, and voice notes captured in the moment before details are forgotten.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🎙️</span>
+        <h3>Offline Voice Transcription</h3>
+        <p>Speak your notes hands-free. All audio processed locally on the device — never sent to any server.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">📄</span>
+        <h3>PDF Report Export</h3>
+        <p>Generate professional incident reports and shift logs as PDFs directly on your device. Tap Export PDF and your device's share sheet appears — you choose where to send it. DSP Buddy never automatically transmits any data.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🔍</span>
+        <h3>Filter &amp; Search History</h3>
+        <p>Filter incident history by month and category. Track behavioral patterns over time with one tap.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">📵</span>
+        <h3>No Internet Required</h3>
+        <p>DSP Buddy never connects to any server. All data stays on your device. Works anywhere — no signal needed, no cloud dependency, ever.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">📓</span>
+        <h3>Shift Log</h3>
+        <p>End-of-shift notes with timestamps and PDF export for seamless handoffs between staff.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🔒</span>
+        <h3>HIPAA Safe by Design</h3>
+        <p>No accounts. No cloud. No data leaving the device. Privacy built in from day one, not added later.</p>
+      </div>
+    </div>
+
+    <div style="margin-top: 60px;">
+      <p style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--red); margin-bottom: 20px;">All 7 Situation Categories</p>
+      <div class="categories-row">
+        <span class="category-chip" style="background:#c0392b;">🖐 Aggressive Behavior</span>
+        <span class="category-chip" style="background:#d35400;">💊 Refusing Medication</span>
+        <span class="category-chip" style="background:#7d3c98;">🌀 Meltdown</span>
+        <span class="category-chip" style="background:#148f77;">🍴 Refusing Eat/Drink</span>
+        <span class="category-chip" style="background:#1a5276;">🌙 Sleep Issues</span>
+        <span class="category-chip" style="background:#b7950b;">⚡ Fall/Injury</span>
+        <span class="category-chip" style="background:#555;">❤️ My Own Situation</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- COMPLEMENT -->
+  <section>
+    <p class="section-label">Integration</p>
+    <h2 class="section-title">Not a Replacement. A Complement.</h2>
+    <div class="problem-grid">
+      <div class="problem-text">
+        <p>Your organization already has software for documentation, medication management, and HR. <strong>DSP Buddy doesn't replace any of it.</strong></p>
+        <p>It's the tool staff use <strong>during the incident</strong> — before they sit down to document formally. Think of it as the bridge between the moment and the paperwork.</p>
+        <p>No complex onboarding. No IT setup required. No threat to existing systems. Staff are using it on day one.</p>
+      </div>
+      <div class="about-highlight">
+        <h3>The Workflow</h3>
+        <p style="color: var(--muted); font-size: 0.95rem; line-height: 1.8;">
+          🔴 <strong style="color: var(--text);">Incident occurs</strong> → DSP opens DSP Buddy<br><br>
+          ✅ <strong style="color: var(--text);">Action steps</strong> → Immediate guidance on screen<br><br>
+          📋 <strong style="color: var(--text);">Log the incident</strong> → Severity, tags, voice note<br><br>
+          📄 <strong style="color: var(--text);">End of shift</strong> → Export PDF, email to supervisor<br><br>
+          📁 <strong style="color: var(--text);">Formal documentation</strong> → Staff opens existing system
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- PRIVACY -->
+  <section>
+    <p class="section-label">Privacy</p>
+    <h2 class="section-title">Your Data Stays Where It Belongs</h2>
+    <div class="privacy-section">
+      <div>
+        <p style="color: var(--muted); line-height: 1.8; margin-bottom: 20px; font-size: 1.05rem;">
+          Unlike apps that rely on cloud-based voice recognition, DSP Buddy processes all voice notes locally on your device using offline speech recognition — no audio ever leaves your phone.
+        </p>
+        <p style="color: var(--muted); line-height: 1.8; margin-bottom: 20px; font-size: 1.05rem;">
+          No audio is ever transmitted to Google, Apple, or any third party. No client information ever leaves the device. Ever.
+        </p>
+        <p style="color: var(--muted); line-height: 1.8; font-size: 1.05rem;">
+          <strong style="color: var(--teal);">Built offline from day one</strong> — not patched for compliance after the fact.
+        </p>
+      </div>
+      <div class="privacy-stats">
+        <div class="privacy-stat">
+          <div class="number">0</div>
+          <div class="label">Bytes sent to cloud</div>
+        </div>
+        <div class="privacy-stat">
+          <div class="number">100%</div>
+          <div class="label">On-device processing</div>
+        </div>
+        <div class="privacy-stat">
+          <div class="number">0</div>
+          <div class="label">User accounts required</div>
+        </div>
+        <div class="privacy-stat">
+          <div class="number">✓</div>
+          <div class="label">HIPAA safe by design</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- PRICING -->
+  <section>
+    <p class="section-label">Pricing</p>
+    <h2 class="section-title" style="text-align:center;">Simple One-Time Pricing</h2>
+    <p class="section-subtitle" style="text-align:center; margin-left:auto; margin-right:auto;">Pay once. Use forever. Just $150 per group home — one flat lifetime license with no subscriptions, no renewals, no surprises.</p>
+
+    <div class="pricing-card">
+
+      <div style="background: rgba(45,212,191,0.1); border: 1px solid rgba(45,212,191,0.3); border-radius: 12px; padding: 20px 24px; margin-bottom: 32px; text-align: left;">
+        <p style="color: var(--teal); font-weight: 700; font-size: 1rem; margin-bottom: 6px;">✅ 30-Day Money Back Guarantee</p>
+        <p style="color: var(--muted); font-size: 0.9rem; line-height: 1.6;">If your staff don't find DSP Buddy useful within 30 days we'll refund you fully. No questions asked. After 30 days all sales are final.</p>
+      </div>
+
+      <div style="background: rgba(224,82,82,0.08); border: 1px solid rgba(224,82,82,0.2); border-radius: 12px; padding: 16px 24px; margin-bottom: 32px; text-align: left; display: flex; align-items: center; gap: 12px;">
+        <span style="font-size: 1.4rem;">🤖</span>
+        <p style="color: var(--muted); font-size: 0.9rem; line-height: 1.5;"><strong style="color: var(--text);">Android only</strong> — currently available for Android devices. iOS version coming soon.</p>
+      </div>
+
+      <div style="text-align: center; margin-bottom: 32px;">
+        <p style="font-size: 4rem; font-weight: 900; color: var(--teal); line-height: 1;">$150</p>
+        <p style="font-size: 1.1rem; color: var(--muted); margin-top: 8px;">per group home — one time</p>
+        <p style="font-size: 0.9rem; color: var(--muted); margin-top: 8px;">10 homes = $1,500 total. Pay once, use forever.</p>
+      </div>
+
+      <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 32px;">
+        <p style="font-weight: 700; color: var(--text); margin-bottom: 16px;">Example pricing:</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border);">
+            <span style="color: var(--muted);">1 home</span>
+            <span style="color: var(--teal); font-weight: 700;">$150</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border);">
+            <span style="color: var(--muted);">5 homes</span>
+            <span style="color: var(--teal); font-weight: 700;">$750</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border);">
+            <span style="color: var(--muted);">10 homes</span>
+            <span style="color: var(--teal); font-weight: 700;">$1,500</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border);">
+            <span style="color: var(--muted);">15 homes</span>
+            <span style="color: var(--teal); font-weight: 700;">$2,250</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 8px 0;">
+            <span style="color: var(--muted);">20 homes</span>
+            <span style="color: var(--teal); font-weight: 700;">$3,000</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 8px 0;">
+            <span style="color: var(--muted);">21+ homes</span>
+            <span style="color: var(--muted); font-weight: 700;">Contact us</span>
+          </div>
+        </div>
+      </div>
+
+      <ul class="pricing-features" style="margin-bottom: 32px;">
+        <li><span class="check">✓</span> Unlimited staff across all locations</li>
+        <li><span class="check">✓</span> All 7 situation categories included</li>
+        <li><span class="check">✓</span> PDF export and shift logging</li>
+        <li><span class="check">✓</span> Offline voice transcription — HIPAA safe</li>
+        <li><span class="check">✓</span> Future updates included</li>
+        <li><span class="check">✓</span> Direct support from the developer</li>
+        <li><span class="check">✓</span> 30-day money back guarantee</li>
+        <li><span class="check">✓</span> No subscriptions. No renewals. Ever.</li>
+      </ul>
+
+      <a href="#contact" class="btn-primary" style="display:block; text-align:center;">Get Started Today</a>
+      <p style="margin-top: 16px; font-size: 0.8rem; color: var(--muted);">30-day money back guarantee. After 30 days all sales are final.</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ABOUT -->
+  <section>
+    <p class="section-label">About</p>
+    <h2 class="section-title">Built By a DSP. For DSPs.</h2>
+    <div class="about-section">
+      <div class="about-text">
+        <p>DSP Buddy was created by a <strong>Direct Support Professional</strong> with firsthand experience working 12-hour shifts in group homes.</p>
+        <p>After experiencing the gap between what happens during an incident and what gets documented, the tool that DSPs actually needed was built — from the inside out.</p>
+        <p>Not a developer. Not a tech company. <strong>A caregiver who learned to build</strong> because the tool didn't exist.</p>
+        <p>Every feature in DSP Buddy came from real experience on the floor — not a product meeting.</p>
+      </div>
+      <div class="about-highlight">
+        <h3>"I made this because I needed it."</h3>
+        <p>During a difficult shift there's no time to search through documentation systems or try to remember everything that happened. DSP Buddy puts the right information in your hands in seconds — and captures what happened before the details fade.</p>
+        <br>
+        <p style="color: var(--red); font-weight: 600;">Built by someone who does this job. Every day.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- CTA / CONTACT -->
+  <section id="contact">
+    <div class="cta-section">
+      <h2>Ready to Support Your DSPs?</h2>
+      <p>Reach out to learn more about DSP Buddy and discuss an organizational plan for your homes.</p>
+      <a href="mailto:jason@dspbuddy.app" class="btn-primary">jason@dspbuddy.app</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 DSP Buddy. All Rights Reserved.</p>
+    <p>DSP Buddy — <a href="mailto:jason@dspbuddy.app">jason@dspbuddy.app</a></p>
+    <p><a href="mailto:jason@dspbuddy.app">Contact</a></p>
+  </footer>
+
+</body>
+</html>
