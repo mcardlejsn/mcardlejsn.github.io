@@ -615,87 +615,132 @@
   </div>
 </footer>
 
-<script>
-  // ── Web3Forms ──────────────────────────────────────────────
-  // Paste your access key below. Get one free (no password needed)
-  // at https://web3forms.com — enter the email you want inquiries
-  // sent to, verify it, and copy the access key it gives you.
-  const WEB3FORMS_ACCESS_KEY = 'f9b78355-2f25-4ae6-b315-4333abc66d92';
+  <script>
+    // ── Contact form: Web3Forms with automatic email fallback ──────────
+    // Primary delivery is Web3Forms. If it fails for ANY reason — bad or
+    // disabled key, network down, or the request times out — the form does
+    // NOT silently die. It hands the visitor a one-click, pre-filled email
+    // to jason@dspsuite.app with everything they typed, so the lead still
+    // reaches the inbox, and logs the real cause to the browser console.
+    const WEB3FORMS_ACCESS_KEY = 'f9b78355-2f25-4ae6-b315-4333abc66d92';
+    const CONTACT_EMAIL = 'jason@dspsuite.app';
+    const SUBMIT_TIMEOUT_MS = 12000;
 
-  function showFormError(msg) {
-    const el = document.getElementById('form-error');
-    el.textContent = msg;
-    el.style.display = 'block';
-  }
-  function hideFormError() {
-    document.getElementById('form-error').style.display = 'none';
-  }
-
-  async function handleSubmit() {
-    const firstName = document.getElementById('first-name').value.trim();
-    const email     = document.getElementById('email').value.trim();
-    const orgName   = document.getElementById('org-name').value.trim();
-    const numHomes  = document.getElementById('num-homes').value;
-
-    if (!firstName || !email || !orgName || !numHomes) {
-      showFormError('Please fill in all required fields before submitting.');
-      return;
+    function showFormError(html) {
+      const el = document.getElementById('form-error');
+      el.innerHTML = html;
+      el.style.display = 'block';
     }
-    if (!email.includes('@') || !email.includes('.')) {
-      showFormError('Please enter a valid email address.');
-      return;
+    function hideFormError() {
+      document.getElementById('form-error').style.display = 'none';
     }
 
-    // Honeypot: real users never check this hidden box; bots often do.
-    if (document.getElementById('botcheck').checked) { return; }
+    // Build a mailto: link carrying every field, so a failed API submission
+    // becomes a one-click email instead of a lost lead.
+    function buildMailtoFallback(d) {
+      const subject = 'DSP Suite Inquiry — ' + (d.orgName || '');
+      const body =
+        'Name: ' + d.firstName + ' ' + d.lastName + '\n' +
+        'Email: ' + d.email + '\n' +
+        'Organization: ' + d.orgName + '\n' +
+        'Locations: ' + d.numHomes + '\n' +
+        'Interest: ' + (d.interest || 'Not specified') + '\n\n' +
+        'Message:\n' + (d.message || '(none)');
+      return 'mailto:' + CONTACT_EMAIL +
+        '?subject=' + encodeURIComponent(subject) +
+        '&body=' + encodeURIComponent(body);
+    }
 
-    const lastName = document.getElementById('last-name').value.trim();
-    const interest = document.getElementById('interest').value;
-    const message  = document.getElementById('message').value.trim();
+    function offerEmailFallback(d) {
+      const link = buildMailtoFallback(d);
+      showFormError(
+        'We couldn\'t send that automatically — but your details are saved. ' +
+        '<a href="' + link + '" style="color:var(--teal);text-decoration:underline;">' +
+        'Click here to send them by email instead</a> (everything\'s already filled in), ' +
+        'or write to <a href="mailto:' + CONTACT_EMAIL + '" style="color:var(--teal);text-decoration:underline;">' +
+        CONTACT_EMAIL + '</a>.'
+      );
+    }
 
-    const btn = document.querySelector('.form-submit');
-    const originalLabel = btn.textContent;
-    btn.disabled = true;
-    btn.textContent = 'Sending…';
-    hideFormError();
+    async function handleSubmit() {
+      const firstName = document.getElementById('first-name').value.trim();
+      const email     = document.getElementById('email').value.trim();
+      const orgName   = document.getElementById('org-name').value.trim();
+      const numHomes  = document.getElementById('num-homes').value;
 
-    const payload = {
-      access_key:   WEB3FORMS_ACCESS_KEY,
-      subject:      'DSP Suite Inquiry — ' + orgName,
-      from_name:    'DSP Suite Website',
-      replyto:      email,
-      Name:         firstName + ' ' + lastName,
-      Email:        email,
-      Organization: orgName,
-      Locations:    numHomes,
-      Interest:     interest || 'Not specified',
-      Message:      message || '(none)',
-      botcheck:     false
-    };
+      if (!firstName || !email || !orgName || !numHomes) {
+        showFormError('Please fill in all required fields before submitting.');
+        return;
+      }
+      if (!email.includes('@') || !email.includes('.')) {
+        showFormError('Please enter a valid email address.');
+        return;
+      }
 
-    try {
-      const res = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      const data = await res.json();
-      if (data.success) {
-        document.getElementById('contact-form').style.display = 'none';
-        document.getElementById('form-success').style.display = 'block';
-      } else {
+      // Honeypot: real users never check this hidden box; bots often do.
+      if (document.getElementById('botcheck').checked) { return; }
+
+      const lastName = document.getElementById('last-name').value.trim();
+      const interest = document.getElementById('interest').value;
+      const message  = document.getElementById('message').value.trim();
+      const fields = { firstName, lastName, email, orgName, numHomes, interest, message };
+
+      const btn = document.querySelector('.form-submit');
+      const originalLabel = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      hideFormError();
+
+      const payload = {
+        access_key:   WEB3FORMS_ACCESS_KEY,
+        subject:      'DSP Suite Inquiry — ' + orgName,
+        from_name:    'DSP Suite Website',
+        replyto:      email,
+        Name:         firstName + ' ' + lastName,
+        Email:        email,
+        Organization: orgName,
+        Locations:    numHomes,
+        Interest:     interest || 'Not specified',
+        Message:      message || '(none)',
+        botcheck:     false
+      };
+
+      // Abort if the request hangs, so the button never sticks on "Sending…".
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), SUBMIT_TIMEOUT_MS);
+
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(payload),
+          signal: controller.signal
+        });
+        clearTimeout(timer);
+
+        let data = {};
+        try { data = await res.json(); } catch (e) { data = {}; }
+
+        if (res.ok && data.success) {
+          document.getElementById('contact-form').style.display = 'none';
+          document.getElementById('form-success').style.display = 'block';
+        } else {
+          // Reachable but rejected (e.g. bad/disabled key). Log the real cause.
+          console.error('Web3Forms rejected submission:', res.status, data && data.message);
+          btn.disabled = false;
+          btn.textContent = originalLabel;
+          offerEmailFallback(fields);
+        }
+      } catch (err) {
+        // Network failure or timeout — never leave the visitor with a dead form.
+        clearTimeout(timer);
+        console.error('Contact form submission failed:', err);
         btn.disabled = false;
         btn.textContent = originalLabel;
-        showFormError((data && data.message) ? data.message
-          : 'Something went wrong. Please email jason@dspsuite.app directly.');
+        offerEmailFallback(fields);
       }
-    } catch (err) {
-      btn.disabled = false;
-      btn.textContent = originalLabel;
-      showFormError('Could not send right now. Please email jason@dspsuite.app directly.');
     }
-  }
-</script>
+  </script>
 
 </body>
 </html>
