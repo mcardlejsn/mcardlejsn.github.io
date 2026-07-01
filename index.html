@@ -18,6 +18,61 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/styles.css" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://dspsuite.app/#organization",
+        "name": "DSP Suite",
+        "url": "https://dspsuite.app/",
+        "logo": "https://dspsuite.app/apple-touch-icon.png",
+        "description": "Offline documentation apps for Direct Support Professionals working in group homes and residential care. Built by a DSP. No internet, no accounts, designed for HIPAA compliance.",
+        "areaServed": {
+          "@type": "Country",
+          "name": "United States"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://dspsuite.app/#website",
+        "url": "https://dspsuite.app/",
+        "name": "DSP Suite",
+        "publisher": { "@id": "https://dspsuite.app/#organization" },
+        "inLanguage": "en-US"
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://dspsuite.app/#software",
+        "name": "DSP Suite",
+        "operatingSystem": "Android",
+        "applicationCategory": "BusinessApplication",
+        "publisher": { "@id": "https://dspsuite.app/#organization" },
+        "url": "https://dspsuite.app/",
+        "description": "A suite of six offline apps for Direct Support Professionals: incident logging, medication administration records, goal documentation, resident status check-ins, wellness, and mileage and spending tracking. All data stays on the device. Designed for HIPAA compliance.",
+        "featureList": [
+          "DSP Buddy — incident guidance and logging",
+          "MAR Companion — medication administration records",
+          "Resident Goal Tracker — goal progress documentation",
+          "Resident Check — fast resident status capture with voice notes and PDF reports",
+          "Resident Ledger — mileage and spending tracking",
+          "DSP Wellness — staff wellbeing check-ins",
+          "DSP Suite Launcher — one home screen for all apps",
+          "Supervisor Dashboard — aggregate export view on Windows desktop"
+        ],
+        "offers": {
+          "@type": "Offer",
+          "price": "999.00",
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/InStock",
+          "description": "One-time license per location. Unlimited DSPs per site. No subscription."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 
