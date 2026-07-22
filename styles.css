@@ -180,6 +180,9 @@
       content: ''; flex: 1; height: 1px; background: var(--border);
     }
     .suite-card.extra { border-style: dashed; }
+    .suite-card.no-link { cursor: default; }
+    .suite-card.no-link:hover { transform: none; box-shadow: none; border-color: var(--border); }
+    .suite-card.no-link:hover::before { opacity: 0; }
     .suite-card.extra { border-style: dashed; opacity: 0.85; }
 
     /* ─── SECTION SCAFFOLDING ─── */
