@@ -205,6 +205,7 @@
       border-radius: 20px; padding: 32px;
       transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
       position: relative; overflow: hidden;
+      display: block; text-decoration: none; color: inherit; cursor: pointer;
     }
     .suite-card::before {
       content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
