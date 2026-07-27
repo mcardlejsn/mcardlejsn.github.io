@@ -80,8 +80,8 @@
 <nav>
   <a href="/" class="nav-logo"><span class="nav-logo-dot"></span> DSP Suite</a>
   <div class="nav-links">
-    <a href="/#suite">DSP Suite</a>
-    <a href="/dementia-notebook">Dementia Notebook</a>
+    <a href="index.html">DSP Suite</a>
+    <a href="dementia-notebook.html">Dementia Notebook</a>
   </div>
   <a href="/#contact" class="nav-cta">Get Started</a>
 </nav>
@@ -661,7 +661,7 @@
         // Network failure or timeout — never leave the visitor with a dead form.
         clearTimeout(timer);
         console.error('Contact form submission failed:', err);
-        btn.disabled = false;
+          btn.disabled = false;
         btn.textContent = originalLabel;
         offerEmailFallback(fields);
       }
@@ -670,3 +670,4 @@
 <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "3e620a2fce454cbc8a344baa3a474973"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>
+```[cite: 1]
