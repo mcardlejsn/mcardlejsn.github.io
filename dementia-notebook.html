@@ -175,22 +175,89 @@
 </footer>
 
 <script>
-  function handleWaitlist() {
+  const WEB3FORMS_ACCESS_KEY = 'f9b78355-2f25-4ae6-b315-4333abc66d92';
+  const CONTACT_EMAIL = 'jason@dspsuite.app';
+  const SUBMIT_TIMEOUT_MS = 12000;
+
+  function showWaitlistError(html) {
+    const el = document.getElementById('waitlist-error');
+    el.innerHTML = html;
+    el.style.display = 'block';
+  }
+
+  function hideWaitlistError() {
+    document.getElementById('waitlist-error').style.display = 'none';
+  }
+
+  function buildWaitlistMailto(email) {
+    const subject = 'Dementia Notebook Waitlist Signup';
+    const body = 'Please add this email to the Dementia Notebook waitlist: ' + email;
+    return 'mailto:' + CONTACT_EMAIL +
+      '?subject=' + encodeURIComponent(subject) +
+      '&body=' + encodeURIComponent(body);
+  }
+
+  async function handleWaitlist() {
     const emailInput = document.getElementById('waitlist-email');
     const email = emailInput.value.trim();
-    const errorEl = document.getElementById('waitlist-error');
+    const btn = document.querySelector('#waitlist-form .form-submit');
 
     if (!email || !email.includes('@') || !email.includes('.')) {
-      errorEl.textContent = 'Please enter a valid email address.';
-      errorEl.style.display = 'block';
+      showWaitlistError('Please enter a valid email address.');
       return;
     }
 
-    errorEl.style.display = 'none';
-    document.getElementById('waitlist-form').style.display = 'none';
-    document.getElementById('waitlist-success').style.display = 'block';
+    hideWaitlistError();
+    const originalLabel = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+
+    const payload = {
+      access_key: WEB3FORMS_ACCESS_KEY,
+      subject: 'New Dementia Notebook Waitlist Signup',
+      from_name: 'Dementia Notebook Waitlist',
+      replyto: email,
+      Email: email
+    };
+
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), SUBMIT_TIMEOUT_MS);
+
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload),
+        signal: controller.signal
+      });
+      clearTimeout(timer);
+
+      let data = {};
+      try { data = await res.json(); } catch (e) { data = {}; }
+
+      if (res.ok && data.success) {
+        document.getElementById('waitlist-form').style.display = 'none';
+        document.getElementById('waitlist-success').style.display = 'block';
+      } else {
+        console.error('Web3Forms rejected waitlist submission:', res.status, data && data.message);
+        btn.disabled = false;
+        btn.textContent = originalLabel;
+        const fallbackLink = buildWaitlistMailto(email);
+        showWaitlistError(
+          'Could not submit automatically. <a href="' + fallbackLink + '" style="color:var(--teal);text-decoration:underline;">Click here to join via email instead</a>.'
+        );
+      }
+    } catch (err) {
+      clearTimeout(timer);
+      console.error('Waitlist submission failed:', err);
+      btn.disabled = false;
+      btn.textContent = originalLabel;
+      const fallbackLink = buildWaitlistMailto(email);
+      showWaitlistError(
+        'Connection failed. <a href="' + fallbackLink + '" style="color:var(--teal);text-decoration:underline;">Click here to join via email instead</a>.'
+      );
+    }
   }
 </script>
 </body>
 </html>
-```[cite: 20]
