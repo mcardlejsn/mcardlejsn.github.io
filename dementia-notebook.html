@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dementia Notebook — Free App for Family Caregivers</title>
+  <title>Dementia Journal — Free App for Family Caregivers</title>
   <meta name="description" content="A free, offline-first tool built for family members thrust into dementia caregiving. Incident logging, safety checklists, and immediate de-escalation tips. 100% private." />
   
   <link rel="canonical" href="https://dspsuite.app/dementia-notebook" />
-  <meta property="og:title" content="Dementia Notebook — Free App for Family Caregivers" />
+  <meta property="og:title" content="Dementia Journal — Free App for Family Caregivers" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://dspsuite.app/dementia-notebook" />
   <link rel="icon" href="/favicon.ico" sizes="any" />
@@ -23,7 +23,7 @@
   <a href="/" class="nav-logo"><span class="nav-logo-dot"></span> DSP Suite</a>
   <div class="nav-links">
     <a href="index.html">DSP Suite</a>
-    <a href="dementia-notebook.html" style="color:var(--text);">Dementia Notebook</a>
+    <a href="dementia-notebook.html" style="color:var(--text);">Dementia Journal</a>
   </div>
   <a href="#waitlist" class="nav-cta">Get Notified</a>
 </nav>
@@ -31,11 +31,11 @@
 <!-- ════════════ HERO ════════════ -->
 <div class="page-hero">
   <div class="breadcrumb">
-    <a href="/">Home</a> / <span>Dementia Notebook</span>
+    <a href="/">Home</a> / <span>Dementia Journal</span>
   </div>
   <span class="section-label">Community Resource · 100% Free</span>
   <h1 class="page-h1">Built for families <span class="accent">suddenly thrust into caregiving.</span></h1>
-  <p class="page-lead">When a loved one is diagnosed with dementia, the panic and exhaustion are real. The Dementia Notebook gives family members instant de-escalation tips, behavior logging, and home safety checklists—completely offline, private, and free forever.</p>
+  <p class="page-lead">When a loved one is diagnosed with dementia, the panic and exhaustion are real. The Dementia Journal gives family members instant de-escalation tips, behavior logging, and home safety checklists—completely offline, private, and free forever.</p>
   
   <div class="hero-actions" style="margin-top: 24px;">
     <a href="#waitlist" class="btn-primary">Join the Launch Waitlist →</a>
@@ -56,7 +56,7 @@
     </div>
     <blockquote class="pullquote">
       "No ads, no subscriptions, no cloud tracking. Just a reliable tool built to help families navigate the hardest moments with confidence."
-      <cite>— Creator of the Dementia Notebook</cite>
+      <cite>— Creator of the Dementia Journal</cite>
     </blockquote>
   </div>
 </div>
@@ -128,7 +128,7 @@
     <div class="form-success" id="waitlist-success" style="display:none; text-align:center; padding: 24px 0;">
       <div class="success-icon" style="font-size: 2.5rem; margin-bottom: 12px;">🎉</div>
       <h3 style="font-family:'Fraunces',serif; font-size: 1.4rem; margin-bottom: 8px;">You're on the list!</h3>
-      <p style="color:var(--muted);">We'll send you a quick note the day the Dementia Notebook goes live on the Play Store.</p>
+      <p style="color:var(--muted);">We'll send you a quick note the day the Dementia Journal goes live on the Play Store.</p>
     </div>
   </div>
 </div>
@@ -190,8 +190,8 @@
   }
 
   function buildWaitlistMailto(email) {
-    const subject = 'Dementia Notebook Waitlist Signup';
-    const body = 'Please add this email to the Dementia Notebook waitlist: ' + email;
+    const subject = 'Dementia Journal Waitlist Signup';
+    const body = 'Please add this email to the Dementia Journal waitlist: ' + email;
     return 'mailto:' + CONTACT_EMAIL +
       '?subject=' + encodeURIComponent(subject) +
       '&body=' + encodeURIComponent(body);
@@ -214,8 +214,8 @@
 
     const payload = {
       access_key: WEB3FORMS_ACCESS_KEY,
-      subject: 'New Dementia Notebook Waitlist Signup',
-      from_name: 'Dementia Notebook Waitlist',
+      subject: 'New Dementia Journal Waitlist Signup',
+      from_name: 'Dementia Journal Waitlist',
       replyto: email,
       Email: email
     };
